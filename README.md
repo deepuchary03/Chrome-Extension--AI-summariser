@@ -27,4 +27,6 @@ No more scrolling endlessly — get **concise, context-aware insights** in secon
 ---
 
 ## Screenshots
+![](./2.png)
+![](./1.png)
 
