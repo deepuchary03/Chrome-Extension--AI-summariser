@@ -1,28 +1,30 @@
-﻿# Chrome-Extension--AI-summariser
-🚀 AI at your fingertips!
-I built a Chrome Extension that summarizes any webpage in seconds — powered by OpenAI GPT-4o-mini API.
+# Chrome Extension – AI Summariser
 
-Watch video here : 
+🚀 **AI at your fingertips!**  
+A **Chrome Extension** that instantly summarizes any webpage using the **OpenAI GPT-4o-mini API**.  
+No more scrolling endlessly — get **concise, context-aware insights** in seconds.  
 
-✨ Key Features:
+---
 
-📄 Instant Summaries – Get concise insights without leaving the page
+## 📽 Demo Video  
+[**▶ Watch the demo**](YOUR_VIDEO_LINK_HERE)  
 
-🌍 Universal Compatibility – Works on any website
+---
 
-⚡ Lightning Fast – AI response in seconds
+## ✨ Key Features  
+- 📄 **Instant Summaries** – Get clear, concise summaries without leaving the page  
+- 🌍 **Universal Compatibility** – Works on almost any website  
+- ⚡ **Lightning Fast** – AI-powered results in just seconds  
+- 🎯 **Accurate & Context-Aware** – Powered by **GPT-4o-mini** for high-quality output  
 
-🎯 Accurate & Context-Aware – Uses GPT-4o-mini for smart summaries
+---
 
-💻 Tech Stack:
+## 💻 Tech Stack  
+- **JavaScript** (Chrome Extensions API)  
+- **OpenAI Chat Completions API**  
+- **GPT-4o-mini Model**  
 
-JavaScript (Chrome Extensions API)
+---
 
-OpenAI Chat Completions API
-
-GPT-4o-mini Model
-
-🎥 Watch the demo to see how AI makes browsing smarter!
-
-#AI #ChromeExtension #OpenAI #GPT4o #JavaScript #Innovation #WebSummarizer
+## Screenshots
 
