@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Summarizer</title>
+  <style>
+    :root{--bg:#0b1020;--card:rgba(255,255,255,0.06);--stroke:rgba(255,255,255,0.12);--text:#e8ecf3;--muted:#a9b1c6;--brand-1:#7c5cff;--brand-2:#00e0d8;--radius:18px;}
+    *{box-sizing:border-box}html,body{margin:0;padding:0;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial;min-width:380px;max-width:420px;min-height:580px;background:radial-gradient(1200px 600px at -10% -10%, rgba(124,92,255,.28), transparent 40%),radial-gradient(900px 500px at 110% 0%, rgba(0,224,216,.22), transparent 45%),linear-gradient(180deg,#0b1020,#0a0d18 60%);color:var(--text)}
+    .wrap{padding:16px 16px 18px}
+    .glass{background:var(--card);border:1px solid var(--stroke);backdrop-filter:blur(8px);border-radius:var(--radius);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    header{display:flex;align-items:center;gap:10px;padding:12px 14px;margin-bottom:12px}
+    .logo{width:34px;height:34px;display:grid;place-items:center;border-radius:12px;background:conic-gradient(from 220deg,var(--brand-1),var(--brand-2));box-shadow:0 8px 24px rgba(124,92,255,.35)}
+    .title{display:flex;flex-direction:column;line-height:1}
+    .title b{font-size:15px}
+    .title span{font-size:11.5px;color:var(--muted)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    label{display:block;font-size:12px;color:var(--muted);margin:10px 2px 6px}
+  select,.input,.toggle{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--stroke);background:rgba(20,24,40,0.85);color:var(--text);font-weight:600;appearance:none;box-shadow:0 2px 8px rgba(124,92,255,0.08)}
+  select:focus{outline:2px solid var(--brand-1);background:rgba(40,48,80,0.95);}
+  option{background:rgba(20,24,40,0.98);color:var(--text);font-weight:600;}
+    .btn{cursor:pointer;border:none;padding:11px 14px;border-radius:14px;font-weight:600;background:linear-gradient(135deg,var(--brand-1),var(--brand-2));color:#0a0d18;display:flex;align-items:center;justify-content:center;gap:8px}
+    .btn.secondary{background:transparent;border:1px solid var(--stroke);color:var(--text)}
+    .chips{display:flex;gap:6px;flex-wrap:wrap}
+    .chip{font-size:12px;padding:7px 10px;border-radius:999px;border:1px solid var(--stroke);background:rgba(255,255,255,.04);cursor:pointer}
+    .chip.active{border-color:rgba(124,92,255,.6);box-shadow:inset 0 0 0 1px rgba(124,92,255,.35)}
+    .summary{border-radius:14px;border:1px dashed rgba(255,255,255,.18);background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));padding:12px 12px 12px 38px;position:relative;max-height:220px;overflow:auto;line-height:1.45;font-size:13.5px}
+    .progress{height:8px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}
+    .bar{height:100%;width:0%;background:linear-gradient(90deg,var(--brand-1),var(--brand-2));transition:width .28s ease}
+    .toggles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .toggle{display:flex;align-items:center;gap:10px;padding:10px;min-width:220px;}
+  .switch{width:48px;height:28px;background:#20263c;border-radius:999px;position:relative;border:1px solid var(--stroke);display:flex;align-items:center;flex-shrink:0;}
+  .knob{position:absolute;top:50%;left:3px;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:#8a93a7;transition:all .2s;box-shadow:0 2px 8px rgba(124,92,255,0.10);}
+  .switch.on{background:linear-gradient(135deg,var(--brand-1),var(--brand-2))}
+  .switch.on .knob{left:23px;background:#0a0d18}
+    .muted{color:var(--muted)}
+    .mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+    .footer{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--muted);padding:10px 12px}
+    details{background:rgba(255,255,255,.03);border:1px solid var(--stroke);border-radius:12px;padding:10px 12px}
+    .tiny{font-size:11.5px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="glass">
+      <div class="logo" aria-hidden="true">
+        <!-- Logo SVG or leave empty for now -->
+      </div>
+      <div class="title">
+        <b>AI Summarizer</b>
+        <span>Turn pages into key takeaways</span>
+      </div>
+      <div style="margin-left:auto" class="kbd mono" id="urlHost">…</div>
+    </header>
+
+    <div class="glass" style="padding:12px 12px 4px; margin-bottom:12px">
+      <div class="row">
+        <div>
+          <label for="length">Length</label>
+          <select id="length">
+            <option value="key">Key points</option>
+            <option value="short" selected>~100 words</option>
+            <option value="medium">~200 words</option>
+            <option value="long">~400 words</option>
+          </select>
+        </div>
+        <div>
+          <label for="tone">Tone</label>
+          <select id="tone">
+            <option value="neutral" selected>Neutral</option>
+            <option value="casual">Casual</option>
+            <option value="formal">Formal</option>
+            <option value="bullet">Bulleted</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="language">Language</label>
+          <select id="language">
+            <option value="auto" selected>Auto-detect</option>
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+            <option value="te">Telugu</option>
+            <option value="ta">Tamil</option>
+          </select>
+        </div>
+        <div>
+          <label for="model">Model</label>
+          <select id="model">
+            <option>Default</option>
+            <option>Fast</option>
+            <option>Accurate</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Style</label>
+      <div class="chips" id="styleChips">
+        <div class="chip active" data-style="concise">Concise</div>
+        <div class="chip" data-style="detailed">Detailed</div>
+        <div class="chip" data-style="actionable">Actionable</div>
+        <div class="chip" data-style="academic">Academic</div>
+      </div>
+
+
+
+      <div class="row" style="margin-top:12px">
+        <button class="btn" id="summarizeBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:6px;">
+            <path d="M5 12h14M12 5l7 7-7 7" stroke="#0a0d18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Summarize Page
+        </button>
+        <button class="btn secondary" id="clearBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="margin-right:6px;">
+            <path d="M6 6l12 12M6 18L18 6" stroke="#7c5cff" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Clear
+        </button>
+      </div>
+
+      <div class="full" style="margin-top:10px">
+        <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
+      </div>
+    </div>
+
+    <div class="glass output">
+      <div class="toolbar" style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:8px">
+        <button class="chip" id="copyBtn" title="Copy to clipboard">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="margin-right:4px;">
+            <rect x="9" y="9" width="10" height="13" rx="3" stroke="#7c5cff" stroke-width="2"/>
+            <rect x="3" y="3" width="10" height="13" rx="3" stroke="#00e0d8" stroke-width="2"/>
+          </svg>
+          Copy
+        </button>
+        <button class="chip" id="saveBtn" title="Download .txt">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="margin-right:4px;">
+            <path d="M5 20h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-4V3H9v2H5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2z" stroke="#00e0d8" stroke-width="2"/>
+            <path d="M12 12v6" stroke="#7c5cff" stroke-width="2" stroke-linecap="round"/>
+            <path d="M9 15l3 3 3-3" stroke="#7c5cff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Save
+        </button>
+      </div>
+      <div class="summary" id="summaryBox" aria-live="polite">
+        <svg class="sparkle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:absolute;left:12px;top:12px;opacity:.9">
+          <path d="M12 3l2.2 4.5L19 9.5l-4.2 3.3.9 5.2L12 15.8 8.3 18l.9-5.2L5 9.5l4.8-2L12 3z" fill="url(#g)"/>
+          <defs><linearGradient id="g" x1="0" y1="0" x2="24" y2="24"><stop offset="0%" stop-color="#7c5cff"/><stop offset="100%" stop-color="#00e0d8"/></linearGradient></defs>
+        </svg>
+        <div id="placeholder" class="muted">Your summary will appear here. Click <b>Summarize Page</b> to get started.</div>
+        <div id="content" style="display:none"></div>
+      </div>
+    </div>
+
+    <div class="glass history" style="margin-top:10px">
+      <details>
+        <summary class="tiny muted">History</summary>
+        <div id="history"></div>
+      </details>
+    </div>
+
+    <div class="footer">
+      <span class="pill mono" id="charCount">0 chars</span>
+      <span class="tiny">Tip: Press <span class="mono">Ctrl/Cmd + M</span> to open quickly</span>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
