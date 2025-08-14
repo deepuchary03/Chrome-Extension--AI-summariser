@@ -7,7 +7,7 @@ No more scrolling endlessly — get **concise, context-aware insights** in secon
 ---
 
 ## 📽 Demo Video  
-[**▶ Watch the demo**](YOUR_VIDEO_LINK_HERE)  
+[**▶ Watch the demo**](https://www.linkedin.com/posts/deepuchary03_ai-chromeextension-openai-activity-7361783358151884800-HjyR?utm_source=share&utm_medium=member_desktop&rcm=ACoAAE42qdkB_Akn5u_1EK9198sWAOjY5wL1-Bc)  
 
 ---
 
@@ -29,4 +29,5 @@ No more scrolling endlessly — get **concise, context-aware insights** in secon
 ## Screenshots
 ![](./2.png)
 ![](./1.png)
+
 
